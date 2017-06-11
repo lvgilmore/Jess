@@ -11,11 +11,15 @@ from Jess.Policy.firewall_rule import FirewallRule, FWACTION
 
 
 class GrandPolicyLoader(object):
-    # TODO: add __init__ with connection string or something.
-    # TODO: probably requires inheriting class
+    def __init__(self, *args, **kwargs):
+        self.rules = []
+        args = list(args)
+        args += kwargs.get('rules', [])
+        for rule in args:
+            if isinstance(rule, FirewallRule):
+                self.rules.append(rule)
+            elif isinstance(rule, dict):
+                self.rules.append(FirewallRule(**rule))
 
     def load(self):
-        # TODO: load from DB. this is stupidity
-        return [FirewallRule(source='1.2.3.4', destination='1.2.3.5', protocol='icmp', action=FWACTION.ACCEPT),
-                FirewallRule(source='1.2.3.5', destination='1.2.3.4', protocol='tcp/22', action=FWACTION.ACCEPT),
-                FirewallRule(source='0.0.0.0/0', destination='0.0.0.0/0', protocol='tcp', action=FWACTION.REJECT)]
+        return self.rules

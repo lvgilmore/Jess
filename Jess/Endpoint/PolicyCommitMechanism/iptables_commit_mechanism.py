@@ -18,24 +18,40 @@ class IPTablesCommitMechanism(PolicyCommitMechanism):
         proto = protocol.split('/')[0]
         if proto.lower() in ['icmp']:
             return proto.lower()
-        elif proto in ['tcp', 'udp']:
+        elif proto.lower() in ['tcp', 'udp']:
             try:
-                return "{proto} --dport {port}".format(proto=proto, port=protocol.split('/')[1])
+                return {'protocol': proto.lower(), 'dport': protocol.split('/')[1]}
             except IndexError:
                 try:
-                    return "{proto} --dport {port}".format(proto='tcp', port=protocol)
+                    return {'protocol': 'tcp', 'dport': int(protocol)}
                 except ValueError:
-                    return "{proto}".format(proto=proto)
+                    return {'protocol': protocol}
+
+    @staticmethod
+    def _parse_command_protocol(protocol):
+        p = IPTablesCommitMechanism._parse_protocol(protocol=protocol)
+        if 'dport' in p:
+            return "{protocol} --dport {dport}".format(protocol=p['protocol'], dport=p['dport'])
+        else:
+            return "{protocol}".format(protocol=p['protocol'])
+
+    @staticmethod
+    def _parse_display_protocol(protocol):
+        p = IPTablesCommitMechanism._parse_protocol(protocol=protocol)
+        if 'dport' in p:
+            return p['protocol'], "{protocol} dpt:{dport}".format(protocol=p['protocol'], dport=p['dport'])
+        else:
+            return p['protocol'], "{protocol}".format(protocol=p['protocol'])
 
     @staticmethod
     def _add_rule(formal_rule, chain):
-        action = "iptables -{insert_or_append} {chain} --source {source} --destinaiton {destination} " \
+        action = "iptables -{insert_or_append} {chain} --source {source} --destination {destination} " \
                  "-p {protocol_args} -j {action}".format(
                     insert_or_append='I' if formal_rule.action == FWACTION.ACCEPT else 'A',
                     chain=chain,
                     source=formal_rule.source,
                     destination=formal_rule.destination,
-                    protocol_args=IPTablesCommitMechanism._parse_protocol(formal_rule.protocol),
+                    protocol_args=IPTablesCommitMechanism._parse_command_protocol(formal_rule.protocol),
                     action=formal_rule.s_action()
         )
         return action
@@ -57,12 +73,13 @@ class IPTablesCommitMechanism(PolicyCommitMechanism):
                             ["INPUT", self.incoming_rules]]:
             representation += "Chain {chain}\n".format(chain=chain)
             for rule in rules:
+                p, a = IPTablesCommitMechanism._parse_display_protocol(rule.protocol)
                 representation += "{action}\t{protocol}\t--\t{source}\t{destination}\t{args}\n".format(
                     action=rule.s_action(),
-                    protocol=rule.protocol,
+                    protocol=p,
                     source=rule.source,
                     destination=rule.destination,
-                    args=IPTablesCommitMechanism._parse_protocol(rule.protocol)
+                    args=a
                 )
             representation += "\n"
         return representation

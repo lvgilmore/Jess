@@ -8,13 +8,14 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 from Jess.Policy.firewall_rule import FirewallRule
-from Jess.configs import grand_policy_loader
+from Jess.configs import grand_policy_loader as _grand_policy_loader
 
 
 class EndpointPolicyGenerator(object):
-    def __init__(self, managed_endpoint):
+    def __init__(self, managed_endpoint, grand_policy_loader=None):
         self.managed_endpoint = managed_endpoint
-        grand_policy = grand_policy_loader().load()
+        gpl = grand_policy_loader if grand_policy_loader is not None else _grand_policy_loader()
+        grand_policy = gpl.load()
         self._init_policy(grand_policy)
 
     def _init_policy(self, grand_policy):
