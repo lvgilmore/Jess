@@ -1,3 +1,4 @@
+# /usr/bin/python
 # Copyright (C) 2017 Eitan Geiger and Sebastian Scheinkman
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -65,6 +66,16 @@ class IPTablesCommitMechanism(PolicyCommitMechanism):
         action = IPTablesCommitMechanism._add_rule(formal_rule=formal_rule, chain='OUTPUT')
         super(IPTablesCommitMechanism, self).add_outgoing_rule(formal_rule=formal_rule)
         return action
+
+    def dynamic_representation(self):
+        representation = ""
+        for chain in [(self.incoming_rules, "INPUT"),
+                      (self.forwarding_rules, "FORWARD"),
+                      (self.outgoing_rules, "OUTPUT")]:
+            for rule in chain[0]:
+                representation += self._add_rule(rule, chain[1])
+                representation += "\n"
+        return representation.strip()
 
     def __repr__(self):
         representation = ""

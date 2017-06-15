@@ -34,4 +34,4 @@ class EndpointPolicyGenerator(object):
     def apply_policy(self, grand_policy=None):
         if grand_policy is not None:
             self._init_policy(grand_policy)
-        self.managed_endpoint.method.apply()
+        self.managed_endpoin.apply()

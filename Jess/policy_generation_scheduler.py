@@ -22,5 +22,5 @@ class PolicyGenerationScheduler(object):
         thread_pool.map(EndpointPolicyGenerator, self.managed_endpoints)
 
     def load_endpoints(self):
-        return [ManagedEndpoint(ip='1.2.3.4', method='ssh', mechanism='iptables'),
-                ManagedEndpoint(ip='1.2.3.5', method='ssh', mechanism='iptables')]
+        return [ManagedEndpoint(ip='1.2.3.4', methods='ssh', mechanism='iptables'),
+                ManagedEndpoint(ip='1.2.3.5', methods='ssh', mechanism='iptables')]
