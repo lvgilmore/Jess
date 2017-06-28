@@ -11,6 +11,10 @@ from Jess.Policy.firewall_rule import FWACTION, UnknownActionError
 
 
 class PolicyCommitMechanism(object):
+    @classmethod
+    def identifiers(cls):
+        return ['abstract']
+
     def __init__(self):
         self.incoming_rules = []
         self.outgoing_rules = []
@@ -31,4 +35,4 @@ class PolicyCommitMechanism(object):
     def add_outgoing_rule(self, formal_rule):
         PolicyCommitMechanism._add_rule(formal_rule, self.outgoing_rules)
 
-    # TODO: add abstract __repr__
+    # TODO: add abstract __repr__ and dynamic_representation

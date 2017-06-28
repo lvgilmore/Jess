@@ -7,9 +7,12 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-from Jess.Policy.PolicyLoader.grand_policy_loader import GrandPolicyLoader
 
 
 # TODO: read from file
 number_of_concurent_procs = 16
-grand_policy_loader = GrandPolicyLoader
+# TODO: convert string to class
+dbname = 'grand_policy'
+dbhost = 'localhost'
+dbuser = 'psyco'
+dbpass = 'shit'

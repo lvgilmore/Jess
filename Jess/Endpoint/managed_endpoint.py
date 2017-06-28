@@ -15,6 +15,7 @@ from Jess.Endpoint.PolicyCommitMechanism.iptables_commit_mechanism import IPTabl
 
 
 class ManagedEndpoint(object):
+    # TODO: consider several IPs and several CommitMechansms
     def __init__(self, ip, methods, mechanism=IPTablesCommitMechanism(), strict=True):
         self.ip = IPAddress(ip)
         self.strict = strict

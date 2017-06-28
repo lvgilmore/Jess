@@ -12,6 +12,10 @@ from Jess.Endpoint.PolicyApplicationMethod.abstract_policy_application import Ab
 
 
 class PrinterPolicyApplication(AbstractPolicyApplication):
+    @classmethod
+    def identifiers(cls):
+        return ['printer', 'mock']
+
     def apply(self):
         super(PrinterPolicyApplication, self).apply()
         print(str(self.managed_endpoint.mechanism))

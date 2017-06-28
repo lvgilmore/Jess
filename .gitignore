@@ -1,5 +1,45 @@
-.idea(/.*)
-.idea/Jess.iml
-.idea/misc.xml
-.idea/modules.xml
-.idea/workspace.xml
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+eggs
+parts
+var
+sdist
+develop-eggs
+.installed.cfg
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+coverage.xml
+coverage-ps.xml
+
+# Translations
+*.mo
+
+#IntelliJ
+.idea/
+
+# Misc UNIX Files
+nohup.out
+
+*.DS_Store
+.scrapy/
+scripts/scraping/~/
+celerybeat-schedule*
+
+# Redis dump files
+*.rdb
+

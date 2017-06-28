@@ -30,8 +30,8 @@ class TestsEndpiontPolicyGenerator(TestCase):
                           "\n"))
         self.assertEqual(epg.managed_endpoint.methods[0].apply(),
                          "ssh 6.6.6.6 iptables -F \n"
-                         "ssh 6.6.6.6 -A INPUT --source 6.6.3.6/32 --destination 6.6.6.6/32 -p tcp --dport 443 -j REJECT\n"
-                         "ssh 6.6.6.6 -I OUTPUT --source 6.6.6.6/32 --destination 1.1.1.1/32 -p tcp --dport 80 -j ACCEPT")
+                         "ssh 6.6.6.6 iptables -A INPUT --source 6.6.3.6/32 --destination 6.6.6.6/32 -p tcp --dport 443 -j REJECT\n"
+                         "ssh 6.6.6.6 iptables -I OUTPUT --source 6.6.6.6/32 --destination 1.1.1.1/32 -p tcp --dport 80 -j ACCEPT")
 
     def test_network(self):
         rules = [{'source': '6.6.6.6', 'destination': '1.1.1.0/24', 'protocol': 'tcp/80', 'action': FWACTION.ACCEPT},
@@ -51,6 +51,6 @@ class TestsEndpiontPolicyGenerator(TestCase):
                           "\n"))
         self.assertEqual(epg.managed_endpoint.methods[0].apply(),
                          "ssh 6.6.6.6 iptables -F \n"
-                         "ssh 6.6.6.6 -A INPUT --source 6.6.0.0/16 --destination 6.6.6.6/32 -p tcp --dport 443 -j REJECT\n"
-                         "ssh 6.6.6.6 -I OUTPUT --source 6.6.6.6/32 --destination 1.1.1.0/24 -p tcp --dport 80 -j ACCEPT\n"
-                         "ssh 6.6.6.6 -I OUTPUT --source 6.6.6.6/32 --destination 6.6.6.0/24 -p tcp --dport 443 -j REJECT\n")
+                         "ssh 6.6.6.6 iptables -A INPUT --source 6.6.0.0/16 --destination 6.6.6.6/32 -p tcp --dport 443 -j REJECT\n"
+                         "ssh 6.6.6.6 iptables -I OUTPUT --source 6.6.6.6/32 --destination 1.1.1.0/24 -p tcp --dport 80 -j ACCEPT\n"
+                         "ssh 6.6.6.6 iptables -A OUTPUT --source 6.6.6.6/32 --destination 6.6.6.0/24 -p tcp --dport 443 -j REJECT")
