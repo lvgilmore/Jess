@@ -30,7 +30,7 @@ class PolicyOptimizer(object):
         self.gpl = gpl
 
     def add_rule(self, requested_rule):
-        #first case: source and dest already exists
+        # first case: source and dest already exists
         existing_rules = self.gpl.get_rules(source=requested_rule.source, destination=requested_rule.destination)
         for existing_rule in existing_rules:
             if requested_rule.protocol in existing_rule.protocol:
@@ -44,10 +44,10 @@ class PolicyOptimizer(object):
                                  action=existing_rule.action)
                 )
         if len(existing_rules) > 1:
-            #if we got here, than src and dest exists but not protocol
+            # if we got here, than src and dest exists but not protocol
             return self.gpl.add_rule(requested_rule)
 
-        #second case: source can be aggregated to existing rule
+        # second case: source can be aggregated to existing rule
         # TODO: this is very naive implementation. ironically, it needs to be optimized :)
         for existing_rule in self.gpl.get_rules(destination=requested_rule.destination, protocol=requested_rule.protocol):
             try:
@@ -60,7 +60,7 @@ class PolicyOptimizer(object):
             except IPError:
                 pass
 
-        #third case: destination can be aggregated to existing rule
+        # third case: destination can be aggregated to existing rule
         for existing_rule in self.gpl.get_rules(source=requested_rule.source,
                                                 protocol=requested_rule.protocol):
             try:
@@ -73,5 +73,5 @@ class PolicyOptimizer(object):
             except IPError:
                 pass
 
-        #when all else fails, simply add the f** rule
+        # when all else fails, simply add the f** rule
         return self.gpl.add_rule(requested_rule)
