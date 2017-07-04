@@ -8,9 +8,14 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
+shit = 1
 
 
 class AbstractPolicyApplication(object):
+    @classmethod
+    def identifiers(cls):
+        return ['abstract']
+
     def __init__(self, managed_endpoint):
         self.managed_endpoint = managed_endpoint
 

@@ -13,6 +13,10 @@ from Jess.Endpoint.PolicyApplicationMethod.abstract_policy_application import Ab
 
 
 class SSHPolicyAplication(AbstractPolicyApplication):
+    @classmethod
+    def identifiers(cls):
+        return ['default', 'ssh']
+
     def __init__(self, managed_endpoint):
         super(SSHPolicyAplication, self).__init__(managed_endpoint)
 
@@ -25,4 +29,5 @@ class SSHPolicyAplication(AbstractPolicyApplication):
         return commands.strip()
 
     def clean(self):
+        # TODO: very unelegant, need flush that is independent from mechanism
         return "ssh {ip} iptables -F \n".format(ip=self.managed_endpoint.ip)

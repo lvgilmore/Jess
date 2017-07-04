@@ -10,6 +10,21 @@
 from ipaddr import IPNetwork
 
 
+def parse_protocol(protocol):
+    # TODO: what about other protocols? ICMP, etc.
+    proto = protocol.split('/')[0]
+    if proto.lower() in ['icmp']:
+        return proto.lower()
+    elif proto.lower() in ['tcp', 'udp']:
+        try:
+            return {'protocol': proto.lower(), 'dport': protocol.split('/')[1]}
+        except IndexError:
+            try:
+                return {'protocol': 'tcp', 'dport': int(protocol)}
+            except ValueError:
+                return {'protocol': protocol}
+
+
 # TODO: this is very very stupid. there's got to be a better way.
 class FWACTION(object):
     ACCEPT = 0
@@ -18,7 +33,7 @@ class FWACTION(object):
 
 
 class FirewallRule(object):
-    def __init__(self, source='0.0.0.0', destination='0.0.0.0', protocol='tcp/80', action=FWACTION.REJECT):
+    def __init__(self, source='0.0.0.0/0', destination='0.0.0.0/0', protocol='tcp/80', action=FWACTION.REJECT):
         self.source = IPNetwork(source)
         self.destination = IPNetwork(destination)
         self.protocol = protocol

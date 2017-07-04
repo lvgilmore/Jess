@@ -21,6 +21,7 @@ class PolicyGenerationScheduler(object):
         thread_pool = Pool(number_of_concurent_procs)
         thread_pool.map(EndpointPolicyGenerator, self.managed_endpoints)
 
+    # TODO: change to something real, which means endpoint loader (much like gpl)
     def load_endpoints(self):
         return [ManagedEndpoint(ip='1.2.3.4', methods='ssh', mechanism='iptables'),
                 ManagedEndpoint(ip='1.2.3.5', methods='ssh', mechanism='iptables')]

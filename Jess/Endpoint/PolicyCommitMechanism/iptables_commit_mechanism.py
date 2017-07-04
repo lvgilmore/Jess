@@ -9,28 +9,17 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 from Jess.Endpoint.PolicyCommitMechanism import PolicyCommitMechanism
-from Jess.Policy.firewall_rule import FWACTION
+from Jess.Policy.firewall_rule import FWACTION, parse_protocol
 
 
 class IPTablesCommitMechanism(PolicyCommitMechanism):
-    @staticmethod
-    def _parse_protocol(protocol):
-        # TODO: what about other protocols? ICMP, etc.
-        proto = protocol.split('/')[0]
-        if proto.lower() in ['icmp']:
-            return proto.lower()
-        elif proto.lower() in ['tcp', 'udp']:
-            try:
-                return {'protocol': proto.lower(), 'dport': protocol.split('/')[1]}
-            except IndexError:
-                try:
-                    return {'protocol': 'tcp', 'dport': int(protocol)}
-                except ValueError:
-                    return {'protocol': protocol}
+    @classmethod
+    def identifiers(cls):
+        return ['default', 'iptables']
 
     @staticmethod
     def _parse_command_protocol(protocol):
-        p = IPTablesCommitMechanism._parse_protocol(protocol=protocol)
+        p = parse_protocol(protocol=protocol)
         if 'dport' in p:
             return "{protocol} --dport {dport}".format(protocol=p['protocol'], dport=p['dport'])
         else:
@@ -38,7 +27,7 @@ class IPTablesCommitMechanism(PolicyCommitMechanism):
 
     @staticmethod
     def _parse_display_protocol(protocol):
-        p = IPTablesCommitMechanism._parse_protocol(protocol=protocol)
+        p = parse_protocol(protocol=protocol)
         if 'dport' in p:
             return p['protocol'], "{protocol} dpt:{dport}".format(protocol=p['protocol'], dport=p['dport'])
         else:

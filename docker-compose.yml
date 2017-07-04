@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres
+    container-name: jess-postgres
+    environment:
+      POSTGRES_PASSWORD: ssshimbatman
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - /opt/pgdata:/var/lib/postgresql/data/pgdata
+  rabbit:
+    image: rabbitmq
+    container-name: jess-rabbit
+  Jess:
+    build:
+      context: ./
+      image: Jess
+    links:
+      - rabbit:jess-rabbit
+      - postgres:jess-postgres
