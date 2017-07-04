@@ -3,7 +3,7 @@ FROM python:3.5
 MAINTAINER "Sebastian Sch"
 
 RUN apt-get update
-RUN apt-get install -y python3-pip python3-dev libpq-dev nginx supervisor vim sudo
+RUN apt-get install -y python3-pip python3-dev libpq-dev nginx supervisor vim sudo gcc libsasl2-dev libldap2-dev libssl-dev
 
 RUN pip3 install --upgrade pip
 RUN ln -s /usr/local/bin/pip /usr/bin/pip
